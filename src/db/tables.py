@@ -12,7 +12,7 @@ class User(Base):
     email = Column(String,unique=True,index=True)
     created_at = Column(TIMESTAMP,default=datetime.now())
 
-    books = relationship("Book", back_populates="reader")
+    # books = relationship("Book", back_populates="reader")
 
 class Book(Base):
     __tablename__ = "books"
@@ -22,7 +22,7 @@ class Book(Base):
     isbn = Column(String,nullable=False)
     created_at = Column(TIMESTAMP,default=datetime.now())
 
-    reader_id = Column(Integer,ForeignKey("users.id"))
+    # reader_id = Column(Integer,ForeignKey("users.id"))
 
-    reader = relationship("User",back_populates="books")
+    # reader = relationship("User",back_populates="books")
 
