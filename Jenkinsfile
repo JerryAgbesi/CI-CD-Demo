@@ -1,13 +1,13 @@
 @Library('shared-libraries')
 
 pipeline {
-    agent any
+  agent any
 
-    environment{
+  environment {
         imagename = "jerryelikem/ci-cd-demo:latest"
     }
 
-    stages{
+  stages{
 
         stage("run migrations"){
             steps{
@@ -42,8 +42,8 @@ pipeline {
             }
         }
     }
-
-    post{
+  
+  post{
         always{
             script {
                 try {
@@ -56,6 +56,5 @@ pipeline {
             }
         }
     }
-
 
 }
