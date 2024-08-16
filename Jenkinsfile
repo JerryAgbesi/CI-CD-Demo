@@ -1,3 +1,5 @@
+@Library('shared-libraries')
+
 pipeline {
     agent any
 
@@ -15,10 +17,7 @@ pipeline {
 
         stage("Static code analysis"){
             steps{
-                def scannerHome = tool 'SonarScanner';
-                withSonarQubeEnv('SonarQube') {
-                sh "${scannerHome}/bin/sonar-scanner"
-                }
+                sonarQubeAnalysis()
             }
         }
 
