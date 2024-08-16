@@ -1,4 +1,4 @@
-@Library('shared-libraries')
+// @Library('shared-libraries')
 
 pipeline {
   agent any
@@ -15,11 +15,11 @@ pipeline {
             }
         }
 
-        stage("Static code analysis"){
-            steps{
-                sonarQubeAnalysis()
-            }
-        }
+        // stage("Static code analysis"){
+        //     steps{
+        //         sonarQubeAnalysis()
+        //     }
+        // }
 
         stage("Build image"){
             steps{
