@@ -15,11 +15,16 @@ pipeline {
             }
         }
 
-        // stage("Static code analysis"){
-        //     steps{
-        //         sonarQubeAnalysis()
-        //     }
-        // }
+        stage("Static code analysis"){
+            steps{
+                withSonarQubeEnv('SonarQube') {
+                    script {
+                        def scannerHome = tool 'SonarScanner'
+                        sh "${scannerHome}/bin/sonar-scanner"
+                            }
+                }
+            }
+        }
 
         stage("Build image"){
             steps{
@@ -44,7 +49,15 @@ pipeline {
 
             }
         }
+
+        stage("Trigger redeploy on Render"){
+            steps{
+                withCredentials([string(credentialsId: 'redeployURL',variable: 'redeployURL')]){
+                          sh "curl $redeployURL"
+            }
+        }
     }
+  }
   
   post{
         always{
