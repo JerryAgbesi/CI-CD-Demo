@@ -9,6 +9,12 @@ pipeline {
 
   stages{
 
+        stage("Install dependencies"){
+            steps{
+                sh "pip install --no-cache-dir -r requirements.txt" 
+            }
+        }
+
         stage("Run tests"){
             steps{
                  withCredentials([file(credentialsId: 'CI-Env-File',variable: 'ENV_FILE')]){
