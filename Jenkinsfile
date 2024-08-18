@@ -39,37 +39,37 @@ pipeline {
             }
         }
 
-        // stage("Build image"){
-        //     steps{
-        //         sh "docker build . -t ${imagename}" 
-        //     }
-        // }
+        stage("Build image"){
+            steps{
+                sh "docker build . -t ${imagename}" 
+            }
+        }
 
-        // stage("Push image to DockerHub registry"){
-        //     steps{
-        //          script {
+        stage("Push image to DockerHub registry"){
+            steps{
+                 script {
                    
-        //             withCredentials([
-        //                 usernamePassword(credentialsId: "demoDockerHubCredentials", 
-        //                 usernameVariable: 'DOCKER_USERNAME', 
-        //                 passwordVariable: 'DOCKER_PASSWORD')]) {
-        //                 sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                    withCredentials([
+                        usernamePassword(credentialsId: "demoDockerHubCredentials", 
+                        usernameVariable: 'DOCKER_USERNAME', 
+                        passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
  
                        
-        //                 sh "docker push ${imagename}"
-        //             }
-        //     }
+                        sh "docker push ${imagename}"
+                    }
+            }
 
-        //     }
-        // }
+            }
+        }
 
-    //     stage("Trigger redeploy on Render"){
-    //         steps{
-    //             withCredentials([string(credentialsId: 'redeployURL',variable: 'redeployURL')]){
-    //                       sh "curl $redeployURL"
-    //         }
-    //     }
-    // }
+        stage("Trigger redeploy on Render"){
+            steps{
+                withCredentials([string(credentialsId: 'redeployURL',variable: 'redeployURL')]){
+                          sh "curl $redeployURL"
+            }
+        }
+    }
   }
   
   post{
