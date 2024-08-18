@@ -9,9 +9,16 @@ pipeline {
 
   stages{
 
-        stage("run migrations"){
+        stage("Run tests"){
             steps{
-                sh "echo 'not ready'" 
+                 withCredentials([file(credentialsId: 'CI-Env-File',variable: 'ENV_FILE')]){
+                    script {
+                        sh "cp $ENV_File .env"
+                        sh "pytest --disable-warnings tests/test_books.py" 
+
+                    }
+        }
+               
             }
         }
 
@@ -26,37 +33,37 @@ pipeline {
             }
         }
 
-        stage("Build image"){
-            steps{
-                sh "docker build . -t ${imagename}" 
-            }
-        }
+        // stage("Build image"){
+        //     steps{
+        //         sh "docker build . -t ${imagename}" 
+        //     }
+        // }
 
-        stage("Push image to registry"){
-            steps{
-                 script {
-                    // Use Jenkins credentials for Docker Hub login
-                    withCredentials([
-                        usernamePassword(credentialsId: "demoDockerHubCredentials", 
-                        usernameVariable: 'DOCKER_USERNAME', 
-                        passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+        // stage("Push image to DockerHub registry"){
+        //     steps{
+        //          script {
+                   
+        //             withCredentials([
+        //                 usernamePassword(credentialsId: "demoDockerHubCredentials", 
+        //                 usernameVariable: 'DOCKER_USERNAME', 
+        //                 passwordVariable: 'DOCKER_PASSWORD')]) {
+        //                 sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
  
-                        // Push the image
-                        sh "docker push ${imagename}"
-                    }
-            }
+                       
+        //                 sh "docker push ${imagename}"
+        //             }
+        //     }
 
-            }
-        }
+        //     }
+        // }
 
-        stage("Trigger redeploy on Render"){
-            steps{
-                withCredentials([string(credentialsId: 'redeployURL',variable: 'redeployURL')]){
-                          sh "curl $redeployURL"
-            }
-        }
-    }
+    //     stage("Trigger redeploy on Render"){
+    //         steps{
+    //             withCredentials([string(credentialsId: 'redeployURL',variable: 'redeployURL')]){
+    //                       sh "curl $redeployURL"
+    //         }
+    //     }
+    // }
   }
   
   post{

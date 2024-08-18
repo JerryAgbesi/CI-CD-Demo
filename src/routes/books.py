@@ -27,7 +27,8 @@ def create_book(book:BookCreate ,db: Session = Depends(get_db)):
         logging.debug(e)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="Unable to create book")
 
-@appRouter.get("/{book_id}",status_code=status.HTTP_200_OK,response_model=BookModel)
+@appRouter.get("/{book_id}"
+               ,response_model=BookModel)
 def get_book(book_id:int,db: Session = Depends(get_db)):
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
